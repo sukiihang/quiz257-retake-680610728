@@ -16,15 +16,16 @@ import { v4 as uuidv4 } from 'uuid';
 
 const router = Router();
 
-// GET /api/vXXX/items/:userId 
+// GET /api/v728/items/:userId 
 router.get("",(req: Request, res: Response) => {
+    if(!userId)
     res.status(200).json({
       success: true,
     });
 
 });
 
-// POST /api/vXXX/items/:userId, body = {new item data}
+// POST /api/v728/items/:userId, body = {new item data}
 // add a new Item for userId
 router.post("/",async (req: Request, res: Response) => {
   

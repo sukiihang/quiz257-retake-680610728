@@ -14,15 +14,31 @@ import { users } from "../db/db.ts";
 
 const router = Router();
 
-// POST /api/vXXX/auth/login
+// POST /api/v728/auth/login
 router.post("/login", (req: Request, res: Response) => {
+  
   try { 
+    const payload = (req as any).user;
+    const token = (req as any).token;
+    const user = users.find((u: User) => u.username === payload.username);
+    if (!user || ) {
+      return res.status(401).json({
+        success: false,
+        message: "User or Password is in correct",
+      });
+    if (!user.tokens || !user.tokens.includes(token)) {
+      return res.status(401).json({
+        success: false,
+        message: "User or Password is incorrect",
+      });
+    }
     return res.status(200).json({
       success: true,
       message: "Login successful",
+      token: token
     });
-  } catch (err) {
-    return res.status(500).json({
+    } catch (err) {
+      return res.status(500).json({
       success: false,
       message: "Something is wrong, please try again",
       error: err,
@@ -30,7 +46,7 @@ router.post("/login", (req: Request, res: Response) => {
   }
 });
 
-// POST /api/vXXX/auth/logout
+// POST /api/v728/auth/logout
 router.post("/logout", authenticateToken, (req: Request, res: Response) => {
   try {
     const payload = (req as any).user;
@@ -51,7 +67,6 @@ router.post("/logout", authenticateToken, (req: Request, res: Response) => {
         message: "Invalid token",
       });
     }
-
     // if token exists, remove the token from user.tokens
     user.tokens = user.tokens?.filter((t) => t !== token);
     return res.status(200).json({
@@ -67,7 +82,7 @@ router.post("/logout", authenticateToken, (req: Request, res: Response) => {
   }
 });
 
-// POST /api/vXXX/auth/reset
+// POST /api/v728/auth/reset
 // router.post("/reset", (req: Request, res: Response) => {
 //   try {
 //     reset_users();
